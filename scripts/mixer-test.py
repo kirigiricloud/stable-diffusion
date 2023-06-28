@@ -8,6 +8,7 @@ from contextlib import nullcontext
 import requests
 import functools
 import pdb
+import sys
 
 from ldm.models.diffusion.ddim import DDIMSampler
 from ldm.models.diffusion.plms import PLMSSampler
@@ -26,7 +27,7 @@ model = model.to(device).half()
 
 clip_model, preprocess = clip.load("ViT-L/14", device=device)
 
-n_inputs = 2
+n_inputs = 3
 
 torch.cuda.empty_cache()
 
@@ -95,22 +96,28 @@ def run(args):
 def make_inputs():
     img1 = Image.open('t1.png').convert('RGB')
     img2 = Image.open('t2.png').convert('RGB')
+    img3 = Image.open('t3.png').convert('RGB')
     inputs=[]
     inputs.append('Image')
     inputs.append('Image')
+    inputs.append('Image')
+    inputs.append('')
     inputs.append('')
     inputs.append('')
     inputs.append(img1)
     inputs.append(img2)
+    inputs.append(img3)
     inputs.append(1) # strength 1
     inputs.append(1) # strength 2
+    inputs.append(1) # strength 3
     inputs.append(3) # scale
-    inputs.append(2) # samples
+    inputs.append(1) # samples
     inputs.append(0) # seed
     inputs.append(30) # steps
     inputs = tuple(inputs)
     return inputs
 
+input_img = sys.argv[1]
 inputs = make_inputs()
 res_img = run(inputs)
-res_img.save('res.png')
+res_img[0].save('res.png')
