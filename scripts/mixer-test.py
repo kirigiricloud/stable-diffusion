@@ -9,6 +9,8 @@ import requests
 import functools
 import pdb
 import sys
+import os
+
 
 from ldm.models.diffusion.ddim import DDIMSampler
 from ldm.models.diffusion.plms import PLMSSampler
@@ -94,9 +96,13 @@ def run(args):
     return ims
 
 def make_inputs():
-    img1 = Image.open('t1.png').convert('RGB')
-    img2 = Image.open('t2.png').convert('RGB')
-    img3 = Image.open('t3.png').convert('RGB')
+    working_dir = os.getcwd()
+    inp_path = os.path.join(working_dir, 'input/input.png')
+    path1 = os.path.join(working_dir, 'base-imgs/b1.png')
+    path2 = os.path.join(working_dir, 'base-imgs/b2.png')
+    img1 = Image.open(inp_path).convert('RGB')
+    img2 = Image.open(path1).convert('RGB')
+    img3 = Image.open(path2).convert('RGB')
     inputs=[]
     inputs.append('Image')
     inputs.append('Image')
@@ -117,7 +123,10 @@ def make_inputs():
     inputs = tuple(inputs)
     return inputs
 
+working_dir = os.getcwd()
+
 input_img = sys.argv[1]
 inputs = make_inputs()
 res_img = run(inputs)
-res_img[0].save('res.png')
+save_path = os.path.join(working_dir, 'output/'+input_img+'.png')
+res_img[0].save(save_path)
