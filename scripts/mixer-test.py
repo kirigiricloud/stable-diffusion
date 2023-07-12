@@ -31,7 +31,7 @@ clip_model, preprocess = clip.load("ViT-L/14", device=device)
 
 n_inputs = 3
 
-torch.cuda.empty_cache()
+#torch.cuda.empty_cache()
 
 @torch.no_grad()
 def get_im_c(im_path, clip_model):
